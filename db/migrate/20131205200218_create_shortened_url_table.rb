@@ -7,10 +7,7 @@ class CreateShortenedUrlTable < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index (:shortened_urls, :submitter_id)
-    add_index (:shortened_urls, :short_url, :unique => true)
-  end
-
-  def down
+    add_index(:shortened_urls, :submitter_id)
+    add_index(:shortened_urls, :short_url, :unique => true)
   end
 end
