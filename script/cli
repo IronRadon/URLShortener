@@ -1,0 +1,51 @@
+def get_email
+  puts "Input your email:"
+  gets.chomp
+end
+
+def get_choice
+  puts "What do you want to do?"
+  puts "0. Create shortened URL"
+  puts "1. Visit shortened URL"
+  gets.chomp.to_i
+end
+
+def get_long_url
+  puts "Type in your long URL"
+  gets.chomp
+end
+
+def get_short_url
+  puts "Type in the shortened URL"
+  gets.chomp
+end
+
+def create_short_url(user)
+  long_url = get_long_url
+  ShortenedUrl.create_for_user_and_long_url!(user, long_url).short_url
+end
+
+def launch_short_url(user)
+  short_url = get_short_url
+  shortened_url = ShortenedUrl.where(:short_url => short_url).first
+  long_url = ShortenedUrl.where(:short_url => short_url).first.long_url
+  Visit.record_visit!(user, shortened_url)
+  Launchy.open(long_url)
+end
+
+def run
+  email = get_email
+  choice = get_choice
+  user = User.where(:email => email).first
+
+  case(choice)
+  when 0
+    short_url = create_short_url(user)
+    puts "Short url is: #{short_url}"
+  when 1
+    launch_short_url(user)
+  end
+end
+if __FILE__ == $PROGRAM_NAME
+  run
+end
