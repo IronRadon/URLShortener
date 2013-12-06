@@ -9,12 +9,18 @@ class ShortenedUrl < ActiveRecord::Base
              :foreign_key => :submitter_id,
              :class_name => 'User')
 
+  has_many(:taggings,
+           :primary_key => :id,
+           :foreign_key => :shortened_url_id,
+           :class_name => 'Tagging')
+
   has_many(:visits,
            :primary_key => :id,
            :foreign_key => :shortened_url_id,
            :class_name => 'Visit')
 
   has_many :users, :through => :visits, :source => :user, :uniq => true
+  has_many :tag_topics, :through => :taggings, :source => :tag_topic
 
   def self.random_code
     while(true)
